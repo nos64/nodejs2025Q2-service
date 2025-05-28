@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import type { Artist } from 'src/artists/entities/artist.entity';
 import type { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -38,5 +39,41 @@ export class DataBaseService {
     }
 
     return this.users.delete(id);
+  }
+
+  private readonly artists = new Map<string, Artist>();
+
+  async getArtists(): Promise<Artist[]> {
+    return Array.from(this.artists.values());
+  }
+
+  async getArtistById(id: string): Promise<Artist> {
+    if (!this.artists.has(id)) {
+      throw new Error('Artist not found!');
+    }
+    return this.artists.get(id);
+  }
+
+  async createArtist(createdArtist: Artist) {
+    this.artists.set(createdArtist.id, createdArtist);
+
+    return createdArtist;
+  }
+
+  async updateArtist(id: string, updatedArtist: Artist) {
+    if (!this.artists.has(id)) {
+      throw new Error('Artist not found!');
+    }
+    this.artists.set(id, updatedArtist);
+
+    return updatedArtist;
+  }
+
+  async deleteArtist(id: string) {
+    if (!this.artists.has(id)) {
+      throw new Error('Artist not found!');
+    }
+
+    return this.artists.delete(id);
   }
 }
