@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 import type { Artist } from 'src/artists/entities/artist.entity';
+import type { Track } from 'src/tracks/entities/track.entity';
 import type { User } from 'src/users/entities/user.entity';
 
 @Injectable()
@@ -75,5 +76,41 @@ export class DataBaseService {
     }
 
     return this.artists.delete(id);
+  }
+
+  private readonly tracks = new Map<string, Track>();
+
+  async getTracks(): Promise<Track[]> {
+    return Array.from(this.tracks.values());
+  }
+
+  async getTrackById(id: string): Promise<Track> {
+    if (!this.tracks.has(id)) {
+      throw new Error('Track not found!');
+    }
+    return this.tracks.get(id);
+  }
+
+  async createTrack(createdTrack: Track) {
+    this.tracks.set(createdTrack.id, createdTrack);
+
+    return createdTrack;
+  }
+
+  async updateTrack(id: string, updatedTrack: Track) {
+    if (!this.tracks.has(id)) {
+      throw new Error('Track not found!');
+    }
+    this.tracks.set(id, updatedTrack);
+
+    return updatedTrack;
+  }
+
+  async deleteTrack(id: string) {
+    if (!this.artists.has(id)) {
+      throw new Error('Track not found!');
+    }
+
+    return this.tracks.delete(id);
   }
 }
