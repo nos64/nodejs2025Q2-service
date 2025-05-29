@@ -1,7 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuid, validate as validateId } from 'uuid';
 
-import type { ArtistService } from 'src/artists/artist.service';
 import type { DataBaseService } from 'src/data-base/data-base.service';
 import type { CreateTrackDto } from './dto/create-track.dto';
 import type { UpdateTrackDto } from './dto/update-track.dto';
@@ -9,10 +8,7 @@ import type { Track } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {
-  constructor(
-    private databaseService: DataBaseService,
-    private artistService: ArtistService,
-  ) {}
+  constructor(private databaseService: DataBaseService) {}
 
   async create(createTrackDto: CreateTrackDto) {
     const { name, duration } = createTrackDto;
@@ -25,8 +21,9 @@ export class TrackService {
     }
 
     if ('artistId' in createTrackDto) {
-      const artist = await this.artistService.findOne(createTrackDto.artistId);
-
+      const artist = await this.databaseService.getArtistById(
+        createTrackDto.artistId,
+      );
       if (!artist) {
         throw new HttpException(
           `Artist with id - ${createTrackDto.artistId} not found`,
@@ -78,8 +75,9 @@ export class TrackService {
     }
 
     if ('artistId' in updateTrackDto) {
-      const artist = await this.artistService.findOne(updateTrackDto.artistId);
-
+      const artist = await this.databaseService.getArtistById(
+        updateTrackDto.artistId,
+      );
       if (!artist) {
         throw new HttpException(
           `Artist with id - ${updateTrackDto.artistId} not found`,
