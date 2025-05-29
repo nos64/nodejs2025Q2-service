@@ -82,5 +82,25 @@ export class ArtistService {
       throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
     }
     await this.databaseService.deleteArtist(id);
+
+    const albums = await this.databaseService.getAlbums();
+    albums.map(async (album) =>
+      album.artistId === id
+        ? await this.databaseService.updateAlbum(album.id, {
+            ...album,
+            artistId: null,
+          })
+        : album,
+    );
+
+    const tracks = await this.databaseService.getTracks();
+    tracks.map(async (track) =>
+      track.artistId === id
+        ? await this.databaseService.updateTrack(track.id, {
+            ...track,
+            artistId: null,
+          })
+        : track,
+    );
   }
 }
