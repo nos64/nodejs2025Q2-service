@@ -3,6 +3,7 @@ import { Injectable } from '@nestjs/common';
 import type { Album } from 'src/albums/entities/album.entity';
 import type { Artist } from 'src/artists/entities/artist.entity';
 import type { Favorites } from 'src/favorites/entities/favorite.entity';
+import { FavoritesResponse } from 'src/favorites/entities/favorites-response.entity';
 import type { Track } from 'src/tracks/entities/track.entity';
 import type { User } from 'src/users/entities/user.entity';
 
@@ -158,79 +159,74 @@ export class DataBaseService {
     tracks: [],
   };
 
+  async isEntityInFavorites(
+    id: string,
+    entityType: 'artists' | 'albums' | 'tracks',
+  ): Promise<boolean> {
+    if (!['artists', 'albums', 'tracks'].includes(entityType)) {
+      throw new Error(`Invalid entity type: ${entityType}`);
+    }
+    return this.favs[entityType].includes(id);
+  }
+
+  async isEntityExists(
+    id: string,
+    entityType: 'artists' | 'albums' | 'tracks',
+  ): Promise<boolean> {
+    const entityMap = {
+      artists: this.artists,
+      albums: this.albums,
+      tracks: this.tracks,
+    };
+
+    if (!entityMap[entityType]) {
+      throw new Error(`Invalid entity type: ${entityType}`);
+    }
+
+    return entityMap[entityType].has(id);
+  }
+
+  async getFullFavorites(): Promise<FavoritesResponse> {
+    const favIds = this.favs;
+
+    const artists = await Promise.all(
+      favIds.artists.map(async (id) => this.getArtistById(id)),
+    );
+    const albums = await Promise.all(
+      favIds.albums.map((id) => this.getAlbumById(id)),
+    );
+    const tracks = await Promise.all(
+      favIds.tracks.map((id) => this.getTrackById(id)),
+    );
+
+    return {
+      artists,
+      albums,
+      tracks,
+    };
+  }
+
   async getFavs(): Promise<Favorites> {
     return this.favs;
   }
 
-  async getFavArtists(): Promise<string[]> {
-    return this.favs.artists;
+  async addToFavorites(
+    id: string,
+    type: 'artists' | 'albums' | 'tracks',
+  ): Promise<void> {
+    this.favs[type].push(id);
   }
 
-  async addArtistToFav(id: string): Promise<string> {
-    if (this.favs.artists.includes(id)) {
-      return 'This artist has already been added to favorites before';
-    }
-
-    this.favs.artists.push(id);
-    return 'Artist successfully added to favorites';
-  }
-
-  async removeArtistFromFav(id: string) {
-    const index = this.favs.artists.findIndex((artistId) => artistId === id);
+  async removeFromFavorites(
+    id: string,
+    type: 'artists' | 'albums' | 'tracks',
+  ): Promise<void> {
+    const index = this.favs[type].findIndex((artistId) => artistId === id);
 
     if (index === -1) {
-      return 'Artist not found';
+      throw new Error(`Entity with ${id} not found`);
     }
 
-    this.favs.artists.splice(index, 1);
-    return 'Artist successfully remove from favorites';
-  }
-
-  async getFavAlbums(): Promise<string[]> {
-    return this.favs.albums;
-  }
-
-  async addAlbumToFav(id: string): Promise<string> {
-    if (this.favs.albums.includes(id)) {
-      return 'This album has already been added to favorites before';
-    }
-
-    this.favs.artists.push(id);
-    return 'Album successfully added to favorites';
-  }
-
-  async removeAlbumFromFav(id: string) {
-    const index = this.favs.albums.findIndex((albumId) => albumId === id);
-
-    if (index === -1) {
-      return 'Album not found';
-    }
-
-    this.favs.albums.splice(index, 1);
-    return 'Album successfully remove from favorites';
-  }
-
-  async getFavTracks(): Promise<string[]> {
-    return this.favs.tracks;
-  }
-
-  async addTrackToFav(id: string): Promise<string> {
-    if (this.favs.tracks.includes(id)) {
-      return 'This track has already been added to favorites before';
-    }
-
-    this.favs.tracks.push(id);
-    return 'Track successfully added to favorites';
-  }
-
-  async removeTrackFromFav(id: string) {
-    const index = this.favs.tracks.findIndex((albumId) => albumId === id);
-
-    if (index === -1) {
-      return 'Track not found';
-    }
-
-    this.favs.tracks.splice(index, 1);
-    return 'Track successfully remove from favorites';
+    this.favs[type].splice(index, 1);
   }
 }
