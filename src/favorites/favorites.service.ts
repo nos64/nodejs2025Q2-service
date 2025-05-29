@@ -1,0 +1,99 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { validate as validateId } from 'uuid';
+
+import type { DataBaseService } from 'src/data-base/data-base.service';
+import type { FavoritesResponse } from './entities/favorites-response.entity';
+
+@Injectable()
+export class FavoritesService {
+  constructor(private databaseService: DataBaseService) {}
+  private async addEntityToFav(
+    id: string,
+    entityFavType: 'artists' | 'albums' | 'tracks',
+    entityString: 'Artist' | 'Album' | 'Track',
+  ) {
+    if (!validateId(id)) {
+      throw new HttpException(
+        `Invalid ${entityString} id`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (await this.databaseService.isEntityInFavorites(id, entityFavType)) {
+      return `This ${entityString} has already been added to favorites before`;
+    }
+
+    const isExist = await this.databaseService.isEntityExists(
+      id,
+      entityFavType,
+    );
+
+    if (!isExist) {
+      throw new HttpException(
+        `${entityString} does not exist`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    await this.databaseService.addToFavorites(id, entityFavType);
+
+    return `${entityString} successfully added to favorites`;
+  }
+
+  private async removeEntityFromFav(
+    id: string,
+    entityFavType: 'artists' | 'albums' | 'tracks',
+    entityString: 'Artist' | 'Album' | 'Track',
+  ) {
+    if (!validateId(id)) {
+      throw new HttpException(
+        `Invalid ${entityString} id`,
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    const isEntityInFav = await this.databaseService.isEntityInFavorites(
+      id,
+      entityFavType,
+    );
+
+    if (!isEntityInFav) {
+      throw new HttpException(
+        `This ${entityString} is not favorite`,
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    await this.databaseService.removeFromFavorites(id, entityFavType);
+
+    return `${entityString} successfully removed from favorites`;
+  }
+
+  async addArtistToFav(id: string): Promise<string> {
+    return this.addEntityToFav(id, 'artists', 'Artist');
+  }
+
+  async addAlbumToFav(id: string): Promise<string> {
+    return this.addEntityToFav(id, 'albums', 'Album');
+  }
+
+  async addTrackToFav(id: string): Promise<string> {
+    return this.addEntityToFav(id, 'tracks', 'Track');
+  }
+
+  async findAll(): Promise<FavoritesResponse> {
+    return await this.databaseService.getFullFavorites();
+  }
+
+  async removeArtist(id: string): Promise<string> {
+    return this.removeEntityFromFav(id, 'artists', 'Artist');
+  }
+
+  async removeAlbum(id: string): Promise<string> {
+    return this.removeEntityFromFav(id, 'albums', 'Album');
+  }
+
+  async removeTrack(id: string): Promise<string> {
+    return this.removeEntityFromFav(id, 'tracks', 'Track');
+  }
+}
