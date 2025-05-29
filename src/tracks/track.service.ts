@@ -112,5 +112,14 @@ export class TrackService {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
     await this.databaseService.deleteTrack(id);
+
+    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
+      id,
+      'tracks',
+    );
+
+    if (isArtistInFavs) {
+      await this.databaseService.removeFromFavorites(id, 'tracks');
+    }
   }
 }

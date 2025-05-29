@@ -229,4 +229,16 @@ export class DataBaseService {
 
     this.favs[type].splice(index, 1);
   }
+
+  async getFavArtists(): Promise<string[]> {
+    return this.favs.artists;
+  }
+
+  async getFavAlbums(): Promise<string[]> {
+    return this.favs.albums;
+  }
+
+  async getFavTracks(): Promise<string[]> {
+    return this.favs.tracks;
+  }
 }

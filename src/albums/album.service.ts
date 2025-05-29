@@ -111,5 +111,24 @@ export class AlbumService {
     }
 
     await this.databaseService.deleteAlbum(id);
+
+    const tracks = await this.databaseService.getTracks();
+    tracks.map(async (track) =>
+      track.albumId === id
+        ? await this.databaseService.updateTrack(track.id, {
+            ...track,
+            albumId: null,
+          })
+        : track,
+    );
+
+    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
+      id,
+      'albums',
+    );
+
+    if (isArtistInFavs) {
+      await this.databaseService.removeFromFavorites(id, 'albums');
+    }
   }
 }

@@ -102,5 +102,14 @@ export class ArtistService {
           })
         : track,
     );
+
+    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
+      id,
+      'artists',
+    );
+
+    if (isArtistInFavs) {
+      await this.databaseService.removeFromFavorites(id, 'artists');
+    }
   }
 }
