@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 
+import type { Album } from 'src/albums/entities/album.entity';
 import type { Artist } from 'src/artists/entities/artist.entity';
 import type { Track } from 'src/tracks/entities/track.entity';
 import type { User } from 'src/users/entities/user.entity';
@@ -107,10 +108,46 @@ export class DataBaseService {
   }
 
   async deleteTrack(id: string) {
-    if (!this.artists.has(id)) {
+    if (!this.tracks.has(id)) {
       throw new Error('Track not found!');
     }
 
     return this.tracks.delete(id);
+  }
+
+  private readonly albums = new Map<string, Album>();
+
+  async getAlbums(): Promise<Album[]> {
+    return Array.from(this.albums.values());
+  }
+
+  async getAlbumById(id: string): Promise<Album> {
+    if (!this.albums.has(id)) {
+      throw new Error('Album not found!');
+    }
+    return this.albums.get(id);
+  }
+
+  async createAlbum(createdAlbum: Album) {
+    this.albums.set(createdAlbum.id, createdAlbum);
+
+    return createdAlbum;
+  }
+
+  async updateAlbum(id: string, updatedAlbum: Album) {
+    if (!this.albums.has(id)) {
+      throw new Error('Album not found!');
+    }
+    this.albums.set(id, updatedAlbum);
+
+    return updatedAlbum;
+  }
+
+  async deleteAlbum(id: string) {
+    if (!this.albums.has(id)) {
+      throw new Error('Album not found!');
+    }
+
+    return this.albums.delete(id);
   }
 }
