@@ -53,13 +53,13 @@ export class AlbumService {
 
   async findOne(id: string) {
     if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
     }
 
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
     return album;
@@ -67,13 +67,13 @@ export class AlbumService {
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
     if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
     }
 
     const album = await this.databaseService.getTrackById(id);
 
     if (!album) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
     if ('artistId' in updateAlbumDto) {
@@ -101,13 +101,13 @@ export class AlbumService {
 
   async remove(id: string) {
     if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
+      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
     }
 
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
     await this.databaseService.deleteAlbum(id);
