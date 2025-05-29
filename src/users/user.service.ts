@@ -4,11 +4,11 @@ import { v4 as uuid, validate as validateId } from 'uuid';
 
 import { excludePassword } from 'src/common/helpers/exclude-password.helper';
 
-import type { DataBaseService } from 'src/data-base/data-base.service';
-import type { CreateUserDto } from './dto/create-user.dto';
-import type { UpdateUserDto } from './dto/update-user.dto';
-import type { UserResponse } from './entities/user-response.entry';
-import type { User } from './entities/user.entity';
+import { DataBaseService } from 'src/data-base/data-base.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserResponse } from './entities/user-response.entry';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {

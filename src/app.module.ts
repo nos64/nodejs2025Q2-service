@@ -5,11 +5,12 @@ import { UserModule } from './users/user.module';
 import { ArtistModule } from './artists/artist.module';
 import { TrackModule } from './tracks/track.module';
 import { AlbumModule } from './albums/album.module';
-import { FavoritesService } from './favorites/favorites.service';
 import { FavoritesModule } from './favorites/favorites.module';
+import { DataBaseModule } from './data-base/data-base.module';
 
 @Module({
   imports: [
+    DataBaseModule,
     UserModule,
     ArtistModule,
     TrackModule,
@@ -17,6 +18,6 @@ import { FavoritesModule } from './favorites/favorites.module';
     FavoritesModule,
   ],
   controllers: [AppController],
-  providers: [AppService, FavoritesService],
+  providers: [AppService],
 })
 export class AppModule {}

@@ -12,10 +12,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import type { AlbumService } from './album.service';
-import type { CreateAlbumDto } from './dto/create-album.dto';
-import type { UpdateAlbumDto } from './dto/update-album.dto';
-import type { Album } from './entities/album.entity';
+import { AlbumService } from './album.service';
+import { CreateAlbumDto } from './dto/create-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 
 @Controller('album')
 export class AlbumController {

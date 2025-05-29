@@ -14,9 +14,9 @@ import {
 
 import { UserService } from './user.service';
 
-import type { CreateUserDto } from './dto/create-user.dto';
-import type { UpdateUserDto } from './dto/update-user.dto';
-import type { UserResponse } from './entities/user-response.entry';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { UserResponse } from './entities/user-response.entry';
 
 @Controller('user')
 export class UserController {

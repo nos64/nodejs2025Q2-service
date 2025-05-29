@@ -14,9 +14,9 @@ import {
 
 import { TrackService } from './track.service';
 
-import type { CreateTrackDto } from './dto/create-track.dto';
-import type { UpdateTrackDto } from './dto/update-track.dto';
-import type { Track } from './entities/track.entity';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from './entities/track.entity';
 
 @Controller('track')
 export class TrackController {

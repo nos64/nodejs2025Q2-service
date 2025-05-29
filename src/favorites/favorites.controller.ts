@@ -9,8 +9,8 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 
-import type { FavoritesService } from './favorites.service';
-import type { FavoritesResponse } from './entities/favorites-response.entity';
+import { FavoritesService } from './favorites.service';
+import { FavoritesResponse } from './entities/favorites-response.entity';
 
 @Controller('favs')
 export class FavoritesController {

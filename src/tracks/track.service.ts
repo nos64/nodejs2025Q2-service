@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuid, validate as validateId } from 'uuid';
 
-import type { DataBaseService } from 'src/data-base/data-base.service';
-import type { CreateTrackDto } from './dto/create-track.dto';
-import type { UpdateTrackDto } from './dto/update-track.dto';
-import type { Track } from './entities/track.entity';
+import { DataBaseService } from 'src/data-base/data-base.service';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
+import { Track } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {

@@ -1,8 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { validate as validateId } from 'uuid';
 
-import type { DataBaseService } from 'src/data-base/data-base.service';
-import type { FavoritesResponse } from './entities/favorites-response.entity';
+import { DataBaseService } from 'src/data-base/data-base.service';
+import { FavoritesResponse } from './entities/favorites-response.entity';
 
 @Injectable()
 export class FavoritesService {

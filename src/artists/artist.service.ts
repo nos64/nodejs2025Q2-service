@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuid, validate as validateId } from 'uuid';
 
-import type { CreateArtistDto } from './dto/create-artist.dto';
-import type { UpdateArtistDto } from './dto/update-artist.dto';
-import type { DataBaseService } from 'src/data-base/data-base.service';
-import type { Artist } from './entities/artist.entity';
+import { CreateArtistDto } from './dto/create-artist.dto';
+import { UpdateArtistDto } from './dto/update-artist.dto';
+import { DataBaseService } from 'src/data-base/data-base.service';
+import { Artist } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistService {

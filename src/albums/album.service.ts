@@ -1,18 +1,14 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { v4 as uuid, validate as validateId } from 'uuid';
 
-import type { CreateAlbumDto } from './dto/create-album.dto';
-import type { UpdateAlbumDto } from './dto/update-album.dto';
-import type { DataBaseService } from 'src/data-base/data-base.service';
-import type { ArtistService } from 'src/artists/artist.service';
-import type { Album } from './entities/album.entity';
+import { CreateAlbumDto } from './dto/create-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
+import { DataBaseService } from 'src/data-base/data-base.service';
+import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumService {
-  constructor(
-    private databaseService: DataBaseService,
-    private artistService: ArtistService,
-  ) {}
+  constructor(private databaseService: DataBaseService) {}
 
   async create(createAlbumDto: CreateAlbumDto) {
     const { name, year } = createAlbumDto;
@@ -25,7 +21,9 @@ export class AlbumService {
     }
 
     if ('artistId' in createAlbumDto) {
-      const artist = await this.artistService.findOne(createAlbumDto.artistId);
+      const artist = await this.databaseService.getArtistById(
+        createAlbumDto.artistId,
+      );
 
       if (!artist) {
         throw new HttpException(
@@ -77,8 +75,9 @@ export class AlbumService {
     }
 
     if ('artistId' in updateAlbumDto) {
-      const artist = await this.artistService.findOne(updateAlbumDto.artistId);
-
+      const artist = await this.databaseService.getArtistById(
+        updateAlbumDto.artistId,
+      );
       if (!artist) {
         throw new HttpException(
           `Artist with id - ${updateAlbumDto.artistId} not found`,
