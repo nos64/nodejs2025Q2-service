@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { v4 as uuid, validate as validateId } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -50,10 +50,6 @@ export class AlbumService {
   }
 
   async findOne(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
-    }
-
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
@@ -64,10 +60,6 @@ export class AlbumService {
   }
 
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
-    }
-
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
@@ -99,10 +91,6 @@ export class AlbumService {
   }
 
   async remove(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
-    }
-
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {

@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { v4 as uuid, validate as validateId } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { DataBaseService } from 'src/data-base/data-base.service';
 import { CreateTrackDto } from './dto/create-track.dto';
@@ -20,32 +20,6 @@ export class TrackService {
       );
     }
 
-    // if ('artistId' in createTrackDto && createTrackDto.artistId !== null) {
-    //   console.log('artistId in createTrackDto: ', 'artistId' in createTrackDto);
-    //   const artist = await this.databaseService.getArtistById(
-    //     createTrackDto.artistId,
-    //   );
-    //   if (!artist) {
-    //     throw new HttpException(
-    //       `Artist with id - ${createTrackDto.artistId} not found`,
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    // }
-
-    // if ('albumId' in createTrackDto && createTrackDto.albumId !== null) {
-    //   console.log('albumId in createTrackDto: ', 'albumId' in createTrackDto);
-    //   const album = await this.databaseService.getArtistById(
-    //     createTrackDto.artistId,
-    //   );
-    //   if (!album) {
-    //     throw new HttpException(
-    //       `Album with id - ${createTrackDto.artistId} not found`,
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    // }
-
     const createdTrack = {
       id: uuid(),
       name,
@@ -64,10 +38,6 @@ export class TrackService {
   }
 
   async findOne(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
-    }
-
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {
@@ -78,39 +48,11 @@ export class TrackService {
   }
 
   async update(id: string, updateTrackDto: UpdateTrackDto) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
-    }
-
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
-
-    // if ('artistId' in updateTrackDto && updateTrackDto.albumId !== null) {
-    //   const artist = await this.databaseService.getArtistById(
-    //     updateTrackDto.artistId,
-    //   );
-    //   if (!artist) {
-    //     throw new HttpException(
-    //       `Artist with id - ${updateTrackDto.artistId} not found`,
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    // }
-
-    // if ('albumId' in updateTrackDto && updateTrackDto.albumId !== null) {
-    //   const album = await this.databaseService.getArtistById(
-    //     updateTrackDto.artistId,
-    //   );
-    //   if (!album) {
-    //     throw new HttpException(
-    //       `Album with id - ${updateTrackDto.artistId} not found`,
-    //       HttpStatus.NOT_FOUND,
-    //     );
-    //   }
-    // }
 
     const updatedTrack: Track = {
       ...track,
@@ -126,10 +68,6 @@ export class TrackService {
   }
 
   async remove(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid track id', HttpStatus.BAD_REQUEST);
-    }
-
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {

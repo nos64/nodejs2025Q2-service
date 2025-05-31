@@ -1,5 +1,4 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { validate as validateId } from 'uuid';
 
 import { DataBaseService } from 'src/data-base/data-base.service';
 import { FavoritesResponse } from './entities/favorites-response.entity';
@@ -12,13 +11,6 @@ export class FavoritesService {
     entityFavType: 'artists' | 'albums' | 'tracks',
     entityString: 'Artist' | 'Album' | 'Track',
   ) {
-    if (!validateId(id)) {
-      throw new HttpException(
-        `Invalid ${entityString} id`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     if (await this.databaseService.isEntityInFavorites(id, entityFavType)) {
       return `This ${entityString} has already been added to favorites before`;
     }
@@ -45,13 +37,6 @@ export class FavoritesService {
     entityFavType: 'artists' | 'albums' | 'tracks',
     entityString: 'Artist' | 'Album' | 'Track',
   ) {
-    if (!validateId(id)) {
-      throw new HttpException(
-        `Invalid ${entityString} id`,
-        HttpStatus.BAD_REQUEST,
-      );
-    }
-
     const isEntityInFav = await this.databaseService.isEntityInFavorites(
       id,
       entityFavType,

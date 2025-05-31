@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { v4 as uuid, validate as validateId } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -36,10 +36,6 @@ export class ArtistService {
   }
 
   async findOne(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid artist id', HttpStatus.BAD_REQUEST);
-    }
-
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {
@@ -50,10 +46,6 @@ export class ArtistService {
   }
 
   async update(id: string, updateArtistDto: UpdateArtistDto) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid artist id', HttpStatus.BAD_REQUEST);
-    }
-
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {
@@ -72,10 +64,6 @@ export class ArtistService {
   }
 
   async remove(id: string) {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid artist id', HttpStatus.BAD_REQUEST);
-    }
-
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {

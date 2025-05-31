@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 
-import { v4 as uuid, validate as validateId } from 'uuid';
+import { v4 as uuid } from 'uuid';
 
 import { excludePassword } from 'src/common/helpers/exclude-password.helper';
 
@@ -47,10 +47,6 @@ export class UserService {
   }
 
   async findOne(id: string): Promise<UserResponse> {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
-    }
-
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
@@ -64,10 +60,6 @@ export class UserService {
     id: string,
     updateUserDto: UpdateUserDto,
   ): Promise<UserResponse> {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
-    }
-
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
@@ -94,10 +86,6 @@ export class UserService {
   }
 
   async remove(id: string): Promise<void> {
-    if (!validateId(id)) {
-      throw new HttpException('Invalid user id', HttpStatus.BAD_REQUEST);
-    }
-
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
