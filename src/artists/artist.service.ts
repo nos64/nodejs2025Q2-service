@@ -13,7 +13,7 @@ export class ArtistService {
   async create(createArtistDto: CreateArtistDto) {
     const { name, grammy } = createArtistDto;
 
-    if (!name || !grammy) {
+    if (!name || typeof grammy !== 'boolean') {
       throw new HttpException(
         'Missing required fields',
         HttpStatus.BAD_REQUEST,

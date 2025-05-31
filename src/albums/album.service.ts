@@ -13,14 +13,14 @@ export class AlbumService {
   async create(createAlbumDto: CreateAlbumDto) {
     const { name, year } = createAlbumDto;
 
-    if (!name || !year) {
+    if (!name || typeof year !== 'number') {
       throw new HttpException(
         'Missing required fields',
         HttpStatus.BAD_REQUEST,
       );
     }
 
-    if ('artistId' in createAlbumDto) {
+    if ('artistId' in createAlbumDto && createAlbumDto.artistId !== null) {
       const artist = await this.databaseService.getArtistById(
         createAlbumDto.artistId,
       );
@@ -68,13 +68,13 @@ export class AlbumService {
       throw new HttpException('Invalid album id', HttpStatus.BAD_REQUEST);
     }
 
-    const album = await this.databaseService.getTrackById(id);
+    const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
       throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
     }
 
-    if ('artistId' in updateAlbumDto) {
+    if ('artistId' in updateAlbumDto && updateAlbumDto.artistId !== null) {
       const artist = await this.databaseService.getArtistById(
         updateAlbumDto.artistId,
       );
@@ -88,9 +88,9 @@ export class AlbumService {
 
     const updatedAlbum: Album = {
       ...album,
-      name: updateAlbumDto?.name,
-      year: updateAlbumDto?.year,
-      artistId: updateAlbumDto.artistId ?? null,
+      name: updateAlbumDto?.name || album.name,
+      year: updateAlbumDto?.year || album.year,
+      artistId: updateAlbumDto?.artistId ?? null,
     };
 
     await this.databaseService.updateAlbum(id, updatedAlbum);
@@ -112,21 +112,30 @@ export class AlbumService {
     await this.databaseService.deleteAlbum(id);
 
     const tracks = await this.databaseService.getTracks();
-    tracks.map(async (track) =>
-      track.albumId === id
-        ? await this.databaseService.updateTrack(track.id, {
-            ...track,
-            albumId: null,
-          })
-        : track,
-    );
+    // tracks.map(async (track) =>
+    //   track.albumId === id
+    //     ? await this.databaseService.updateTrack(track.id, {
+    //         ...track,
+    //         albumId: null,
+    //       })
+    //     : track,
+    // );
 
-    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
+    for (const track of tracks) {
+      if (track.albumId === id) {
+        await this.databaseService.updateTrack(track.id, {
+          ...track,
+          albumId: null,
+        });
+      }
+    }
+
+    const isAlbumInFavs = await this.databaseService.isEntityInFavorites(
       id,
       'albums',
     );
 
-    if (isArtistInFavs) {
+    if (isAlbumInFavs) {
       await this.databaseService.removeFromFavorites(id, 'albums');
     }
   }

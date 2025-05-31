@@ -20,17 +20,31 @@ export class TrackService {
       );
     }
 
-    if ('artistId' in createTrackDto) {
-      const artist = await this.databaseService.getArtistById(
-        createTrackDto.artistId,
-      );
-      if (!artist) {
-        throw new HttpException(
-          `Artist with id - ${createTrackDto.artistId} not found`,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-    }
+    // if ('artistId' in createTrackDto && createTrackDto.artistId !== null) {
+    //   console.log('artistId in createTrackDto: ', 'artistId' in createTrackDto);
+    //   const artist = await this.databaseService.getArtistById(
+    //     createTrackDto.artistId,
+    //   );
+    //   if (!artist) {
+    //     throw new HttpException(
+    //       `Artist with id - ${createTrackDto.artistId} not found`,
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    // }
+
+    // if ('albumId' in createTrackDto && createTrackDto.albumId !== null) {
+    //   console.log('albumId in createTrackDto: ', 'albumId' in createTrackDto);
+    //   const album = await this.databaseService.getArtistById(
+    //     createTrackDto.artistId,
+    //   );
+    //   if (!album) {
+    //     throw new HttpException(
+    //       `Album with id - ${createTrackDto.artistId} not found`,
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    // }
 
     const createdTrack = {
       id: uuid(),
@@ -74,23 +88,35 @@ export class TrackService {
       throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
     }
 
-    if ('artistId' in updateTrackDto) {
-      const artist = await this.databaseService.getArtistById(
-        updateTrackDto.artistId,
-      );
-      if (!artist) {
-        throw new HttpException(
-          `Artist with id - ${updateTrackDto.artistId} not found`,
-          HttpStatus.NOT_FOUND,
-        );
-      }
-    }
+    // if ('artistId' in updateTrackDto && updateTrackDto.albumId !== null) {
+    //   const artist = await this.databaseService.getArtistById(
+    //     updateTrackDto.artistId,
+    //   );
+    //   if (!artist) {
+    //     throw new HttpException(
+    //       `Artist with id - ${updateTrackDto.artistId} not found`,
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    // }
+
+    // if ('albumId' in updateTrackDto && updateTrackDto.albumId !== null) {
+    //   const album = await this.databaseService.getArtistById(
+    //     updateTrackDto.artistId,
+    //   );
+    //   if (!album) {
+    //     throw new HttpException(
+    //       `Album with id - ${updateTrackDto.artistId} not found`,
+    //       HttpStatus.NOT_FOUND,
+    //     );
+    //   }
+    // }
 
     const updatedTrack: Track = {
       ...track,
-      name: updateTrackDto?.name,
-      artistId: updateTrackDto?.artistId,
-      albumId: updateTrackDto?.albumId,
+      name: updateTrackDto.name || track.name,
+      artistId: updateTrackDto?.artistId || null,
+      albumId: updateTrackDto?.albumId ?? null,
       duration: updateTrackDto?.duration,
     };
 
