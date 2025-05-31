@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpException,
+  HttpStatus,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 
 import { DataBaseService } from 'src/data-base/data-base.service';
@@ -14,10 +20,7 @@ export class TrackService {
     const { name, duration } = createTrackDto;
 
     if (!name || !duration) {
-      throw new HttpException(
-        'Missing required fields',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Missing required fields');
     }
 
     const createdTrack = {
@@ -41,7 +44,7 @@ export class TrackService {
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Track not found');
     }
 
     return track;
@@ -51,7 +54,7 @@ export class TrackService {
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Track not found');
     }
 
     const updatedTrack: Track = {
@@ -71,7 +74,7 @@ export class TrackService {
     const track = await this.databaseService.getTrackById(id);
 
     if (!track) {
-      throw new HttpException('Track not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Track not found');
     }
     await this.databaseService.deleteTrack(id);
 

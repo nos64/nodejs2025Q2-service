@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 
 import { DataBaseService } from 'src/data-base/data-base.service';
 import { FavoritesResponse } from './entities/favorites-response.entity';
@@ -21,10 +25,7 @@ export class FavoritesService {
     );
 
     if (!isExist) {
-      throw new HttpException(
-        `${entityString} does not exist`,
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new UnprocessableEntityException(`${entityString} does not exist`);
     }
 
     await this.databaseService.addToFavorites(id, entityFavType);
@@ -43,10 +44,7 @@ export class FavoritesService {
     );
 
     if (!isEntityInFav) {
-      throw new HttpException(
-        `This ${entityString} is not favorite`,
-        HttpStatus.NOT_FOUND,
-      );
+      throw new NotFoundException(`This ${entityString} is not favorite`);
     }
 
     await this.databaseService.removeFromFavorites(id, entityFavType);

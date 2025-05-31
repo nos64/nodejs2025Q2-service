@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -14,10 +18,7 @@ export class AlbumService {
     const { name, year } = createAlbumDto;
 
     if (!name || typeof year !== 'number') {
-      throw new HttpException(
-        'Missing required fields',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Missing required fields');
     }
 
     if ('artistId' in createAlbumDto && createAlbumDto.artistId !== null) {
@@ -26,9 +27,8 @@ export class AlbumService {
       );
 
       if (!artist) {
-        throw new HttpException(
+        throw new NotFoundException(
           `Artist with id - ${createAlbumDto.artistId} not found`,
-          HttpStatus.NOT_FOUND,
         );
       }
     }
@@ -53,7 +53,7 @@ export class AlbumService {
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Album not found');
     }
 
     return album;
@@ -63,7 +63,7 @@ export class AlbumService {
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Album not found');
     }
 
     if ('artistId' in updateAlbumDto && updateAlbumDto.artistId !== null) {
@@ -71,9 +71,8 @@ export class AlbumService {
         updateAlbumDto.artistId,
       );
       if (!artist) {
-        throw new HttpException(
+        throw new NotFoundException(
           `Artist with id - ${updateAlbumDto.artistId} not found`,
-          HttpStatus.NOT_FOUND,
         );
       }
     }
@@ -94,21 +93,12 @@ export class AlbumService {
     const album = await this.databaseService.getAlbumById(id);
 
     if (!album) {
-      throw new HttpException('Album not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Album not found');
     }
 
     await this.databaseService.deleteAlbum(id);
 
     const tracks = await this.databaseService.getTracks();
-    // tracks.map(async (track) =>
-    //   track.albumId === id
-    //     ? await this.databaseService.updateTrack(track.id, {
-    //         ...track,
-    //         albumId: null,
-    //       })
-    //     : track,
-    // );
-
     for (const track of tracks) {
       if (track.albumId === id) {
         await this.databaseService.updateTrack(track.id, {

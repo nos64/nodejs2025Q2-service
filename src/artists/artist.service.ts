@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -14,10 +18,7 @@ export class ArtistService {
     const { name, grammy } = createArtistDto;
 
     if (!name || typeof grammy !== 'boolean') {
-      throw new HttpException(
-        'Missing required fields',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Missing required fields');
     }
 
     const createdArtist = {
@@ -39,7 +40,7 @@ export class ArtistService {
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Artist not found');
     }
 
     return artist;
@@ -49,7 +50,7 @@ export class ArtistService {
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Artist not found');
     }
 
     const updatedArtist: Artist = {
@@ -67,7 +68,7 @@ export class ArtistService {
     const artist = await this.databaseService.getArtistById(id);
 
     if (!artist) {
-      throw new HttpException('Artist not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('Artist not found');
     }
     await this.databaseService.deleteArtist(id);
 

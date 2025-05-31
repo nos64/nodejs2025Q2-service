@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 
 import { v4 as uuid } from 'uuid';
 
@@ -18,10 +23,7 @@ export class UserService {
     const { login, password } = createUserDto;
 
     if (!login || !password) {
-      throw new HttpException(
-        'Missing required fields',
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new BadRequestException('Missing required fields');
     }
 
     const createAtUTC = Date.now();
@@ -50,7 +52,7 @@ export class UserService {
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
 
     return excludePassword(user);
@@ -63,14 +65,11 @@ export class UserService {
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
 
     if (user.password !== updateUserDto.oldPassword) {
-      throw new HttpException(
-        'Old password is incorrect',
-        HttpStatus.FORBIDDEN,
-      );
+      throw new ForbiddenException('Old password is incorrect');
     }
 
     const updatedUser: User = {
@@ -89,7 +88,7 @@ export class UserService {
     const user = await this.databaseService.getUserById(id);
 
     if (!user) {
-      throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      throw new NotFoundException('User not found');
     }
     await this.databaseService.deleteUser(id);
   }
