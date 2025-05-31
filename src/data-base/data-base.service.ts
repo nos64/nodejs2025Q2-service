@@ -16,9 +16,6 @@ export class DataBaseService {
   }
 
   async getUserById(id: string): Promise<User> {
-    if (!this.users.has(id)) {
-      throw new Error('User not found!');
-    }
     return this.users.get(id);
   }
 
@@ -29,19 +26,12 @@ export class DataBaseService {
   }
 
   async updateUser(id: string, updatedUser: User) {
-    if (!this.users.has(id)) {
-      throw new Error('User not found!');
-    }
     this.users.set(id, updatedUser);
 
     return updatedUser;
   }
 
   async deleteUser(id: string) {
-    if (!this.users.has(id)) {
-      throw new Error('User not found!');
-    }
-
     return this.users.delete(id);
   }
 
@@ -52,9 +42,6 @@ export class DataBaseService {
   }
 
   async getArtistById(id: string): Promise<Artist> {
-    if (!this.artists.has(id)) {
-      throw new Error('Artist not found!');
-    }
     return this.artists.get(id);
   }
 
@@ -65,19 +52,12 @@ export class DataBaseService {
   }
 
   async updateArtist(id: string, updatedArtist: Artist) {
-    if (!this.artists.has(id)) {
-      throw new Error('Artist not found!');
-    }
     this.artists.set(id, updatedArtist);
 
     return updatedArtist;
   }
 
   async deleteArtist(id: string) {
-    if (!this.artists.has(id)) {
-      throw new Error('Artist not found!');
-    }
-
     return this.artists.delete(id);
   }
 
@@ -88,9 +68,6 @@ export class DataBaseService {
   }
 
   async getTrackById(id: string): Promise<Track> {
-    if (!this.tracks.has(id)) {
-      throw new Error('Track not found!');
-    }
     return this.tracks.get(id);
   }
 
@@ -101,19 +78,12 @@ export class DataBaseService {
   }
 
   async updateTrack(id: string, updatedTrack: Track) {
-    if (!this.tracks.has(id)) {
-      throw new Error('Track not found!');
-    }
     this.tracks.set(id, updatedTrack);
 
     return updatedTrack;
   }
 
   async deleteTrack(id: string) {
-    if (!this.tracks.has(id)) {
-      throw new Error('Track not found!');
-    }
-
     return this.tracks.delete(id);
   }
 
@@ -124,9 +94,6 @@ export class DataBaseService {
   }
 
   async getAlbumById(id: string): Promise<Album> {
-    if (!this.albums.has(id)) {
-      throw new Error('Album not found!');
-    }
     return this.albums.get(id);
   }
 
@@ -137,19 +104,12 @@ export class DataBaseService {
   }
 
   async updateAlbum(id: string, updatedAlbum: Album) {
-    if (!this.albums.has(id)) {
-      throw new Error('Album not found!');
-    }
     this.albums.set(id, updatedAlbum);
 
     return updatedAlbum;
   }
 
   async deleteAlbum(id: string) {
-    if (!this.albums.has(id)) {
-      throw new Error('Album not found!');
-    }
-
     return this.albums.delete(id);
   }
 
