@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -9,10 +11,19 @@ import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { DataBaseService } from 'src/data-base/data-base.service';
 import { Artist } from './entities/artist.entity';
+import { AlbumService } from 'src/albums/album.service';
+import { FavoritesService } from 'src/favorites/favorites.service';
+import { TrackService } from 'src/tracks/track.service';
 
 @Injectable()
 export class ArtistService {
-  constructor(private databaseService: DataBaseService) {}
+  constructor(
+    private databaseService: DataBaseService,
+    private favoritesService: FavoritesService,
+    private trackService: TrackService,
+    @Inject(forwardRef(() => AlbumService))
+    private albumService: AlbumService,
+  ) {}
 
   async create(createArtistDto: CreateArtistDto) {
     const { name, grammy } = createArtistDto;
@@ -72,33 +83,30 @@ export class ArtistService {
     }
     await this.databaseService.deleteArtist(id);
 
-    const albums = await this.databaseService.getAlbums();
+    const albums = await this.albumService.findAll();
     albums.map(async (album) =>
       album.artistId === id
-        ? await this.databaseService.updateAlbum(album.id, {
+        ? await this.albumService.update(album.id, {
             ...album,
             artistId: null,
           })
         : album,
     );
 
-    const tracks = await this.databaseService.getTracks();
+    const tracks = await this.trackService.findAll();
     tracks.map(async (track) =>
       track.artistId === id
-        ? await this.databaseService.updateTrack(track.id, {
+        ? await this.trackService.update(track.id, {
             ...track,
             artistId: null,
           })
         : track,
     );
 
-    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
-      id,
-      'artists',
-    );
+    const isArtistInFavs = await this.favoritesService.isArtistInFavorites(id);
 
     if (isArtistInFavs) {
-      await this.databaseService.removeFromFavorites(id, 'artists');
+      await this.favoritesService.removeArtist(id);
     }
   }
 }
