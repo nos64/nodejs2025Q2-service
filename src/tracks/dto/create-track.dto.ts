@@ -1,4 +1,5 @@
 import { IsInt, IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { IsUUIDorNull } from 'src/common/validators/decorators/is-uuid-or-null.decorator';
 
 export class CreateTrackDto {
   @IsNotEmpty()
@@ -6,10 +7,12 @@ export class CreateTrackDto {
   name: string;
 
   @IsOptional()
-  artistId: string | null = null;
+  @IsUUIDorNull()
+  artistId: string | null;
 
   @IsOptional()
-  albumId: string | null = null;
+  @IsUUIDorNull()
+  albumId: string | null;
 
   @IsNotEmpty()
   @IsInt()

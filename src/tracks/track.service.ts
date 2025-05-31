@@ -23,8 +23,8 @@ export class TrackService {
     const createdTrack = {
       id: uuid(),
       name,
-      artistId: createTrackDto.artistId,
-      albumId: createTrackDto.albumId,
+      artistId: createTrackDto.artistId ?? null,
+      albumId: createTrackDto.albumId ?? null,
       duration,
     };
 
