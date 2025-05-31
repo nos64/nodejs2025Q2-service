@@ -7,5 +7,6 @@ import { DataBaseModule } from 'src/data-base/data-base.module';
   imports: [DataBaseModule],
   controllers: [FavoritesController],
   providers: [FavoritesService],
+  exports: [FavoritesService],
 })
 export class FavoritesModule {}

@@ -79,4 +79,16 @@ export class FavoritesService {
   async removeTrack(id: string): Promise<string> {
     return this.removeEntityFromFav(id, 'tracks', 'Track');
   }
+
+  async isAlbumInFavorites(id: string) {
+    return await this.databaseService.isEntityInFavorites(id, 'albums');
+  }
+
+  async isArtistInFavorites(id: string) {
+    return await this.databaseService.isEntityInFavorites(id, 'artists');
+  }
+
+  async isTrackInFavorites(id: string) {
+    return await this.databaseService.isEntityInFavorites(id, 'tracks');
+  }
 }
