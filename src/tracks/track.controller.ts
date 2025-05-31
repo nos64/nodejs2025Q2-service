@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  ValidationPipe,
   Put,
   ParseUUIDPipe,
   HttpStatus,
@@ -24,7 +23,7 @@ export class TrackController {
 
   @Post()
   async create(
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     createTrackDto: CreateTrackDto,
   ): Promise<Track> {
     return await this.trackService.create(createTrackDto);
@@ -43,7 +42,7 @@ export class TrackController {
   @Put(':id')
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     updateTrackDto: UpdateTrackDto,
   ) {
     return await this.trackService.update(id, updateTrackDto);

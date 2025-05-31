@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  ValidationPipe,
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
@@ -23,7 +22,7 @@ export class ArtistController {
 
   @Post()
   async create(
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     createArtistDto: CreateArtistDto,
   ): Promise<Artist> {
     return await this.artistService.create(createArtistDto);
@@ -42,7 +41,7 @@ export class ArtistController {
   @Put(':id')
   async update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     updateArtistDto: UpdateArtistDto,
   ): Promise<Artist> {
     return await this.artistService.update(id, updateArtistDto);

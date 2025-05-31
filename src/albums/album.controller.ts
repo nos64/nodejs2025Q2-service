@@ -5,7 +5,6 @@ import {
   Body,
   Param,
   Delete,
-  ValidationPipe,
   ParseUUIDPipe,
   HttpCode,
   HttpStatus,
@@ -23,7 +22,7 @@ export class AlbumController {
 
   @Post()
   create(
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     createAlbumDto: CreateAlbumDto,
   ): Promise<Album> {
     return this.albumService.create(createAlbumDto);
@@ -42,7 +41,7 @@ export class AlbumController {
   @Put(':id')
   update(
     @Param('id', new ParseUUIDPipe()) id: string,
-    @Body(new ValidationPipe({ transform: true }))
+    @Body()
     updateAlbumDto: UpdateAlbumDto,
   ) {
     return this.albumService.update(id, updateAlbumDto);
