@@ -1,7 +1,5 @@
 import {
   BadRequestException,
-  HttpException,
-  HttpStatus,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -11,10 +9,14 @@ import { DataBaseService } from 'src/data-base/data-base.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
+import { FavoritesService } from 'src/favorites/favorites.service';
 
 @Injectable()
 export class TrackService {
-  constructor(private databaseService: DataBaseService) {}
+  constructor(
+    private databaseService: DataBaseService,
+    private favoritesService: FavoritesService,
+  ) {}
 
   async create(createTrackDto: CreateTrackDto) {
     const { name, duration } = createTrackDto;
@@ -78,13 +80,10 @@ export class TrackService {
     }
     await this.databaseService.deleteTrack(id);
 
-    const isArtistInFavs = await this.databaseService.isEntityInFavorites(
-      id,
-      'tracks',
-    );
+    const isArtistInFavs = await this.favoritesService.isTrackInFavorites(id);
 
     if (isArtistInFavs) {
-      await this.databaseService.removeFromFavorites(id, 'tracks');
+      await this.favoritesService.removeTrack(id);
     }
   }
 }
