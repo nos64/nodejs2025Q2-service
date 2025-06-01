@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -21,11 +20,6 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<UserResponse> {
     const { login, password } = createUserDto;
-
-    if (!login || !password) {
-      throw new BadRequestException('Missing required fields');
-    }
-
     const createAtUTC = Date.now();
 
     const createdUser = {

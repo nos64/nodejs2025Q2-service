@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -27,11 +26,6 @@ export class ArtistService {
 
   async create(createArtistDto: CreateArtistDto) {
     const { name, grammy } = createArtistDto;
-
-    if (!name || typeof grammy !== 'boolean') {
-      throw new BadRequestException('Missing required fields');
-    }
-
     const createdArtist = {
       id: uuid(),
       name,

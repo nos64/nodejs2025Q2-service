@@ -1,8 +1,4 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { v4 as uuid } from 'uuid';
 
 import { DataBaseService } from 'src/data-base/data-base.service';
@@ -20,11 +16,6 @@ export class TrackService {
 
   async create(createTrackDto: CreateTrackDto) {
     const { name, duration } = createTrackDto;
-
-    if (!name || !duration) {
-      throw new BadRequestException('Missing required fields');
-    }
-
     const createdTrack = {
       id: uuid(),
       name,

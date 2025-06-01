@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   forwardRef,
   Inject,
   Injectable,
@@ -27,21 +26,6 @@ export class AlbumService {
 
   async create(createAlbumDto: CreateAlbumDto) {
     const { name, year } = createAlbumDto;
-
-    if (!name || typeof year !== 'number') {
-      throw new BadRequestException('Missing required fields');
-    }
-
-    if ('artistId' in createAlbumDto && createAlbumDto.artistId !== null) {
-      const artist = await this.artistService.findOne(createAlbumDto.artistId);
-
-      if (!artist) {
-        throw new NotFoundException(
-          `Artist with id - ${createAlbumDto.artistId} not found`,
-        );
-      }
-    }
-
     const createdAlbum: Album = {
       id: uuid(),
       name,
