@@ -1,0 +1,41 @@
+services:
+  app:
+    container_name: app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    restart: always
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+      - node-modules:/app/node_modules
+    networks:
+      - home-library-service
+
+  db:
+    container_name: db
+    build:
+      context: .
+      dockerfile: db.Dockerfile
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_DATABASE: ${DB_DATABASE}
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - home-library-service
+
+volumes:
+  postgres-data:
+  node-modules:
+
+networks:
+  home-library-service:
+    driver: bridge
