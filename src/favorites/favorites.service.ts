@@ -6,14 +6,15 @@ import {
 
 import { DataBaseService } from 'src/data-base/data-base.service';
 import { FavoritesResponse } from './entities/favorites-response.entity';
+import { type FavoriteEntryName, Favorites } from './entities/favorite.entity';
 
 @Injectable()
 export class FavoritesService {
   constructor(private databaseService: DataBaseService) {}
   private async addEntityToFav(
     id: string,
-    entityFavType: 'artists' | 'albums' | 'tracks',
-    entityString: 'Artist' | 'Album' | 'Track',
+    entityFavType: keyof Favorites,
+    entityString: FavoriteEntryName,
   ) {
     if (await this.databaseService.isEntityInFavorites(id, entityFavType)) {
       return `This ${entityString} has already been added to favorites before`;
@@ -35,8 +36,8 @@ export class FavoritesService {
 
   private async removeEntityFromFav(
     id: string,
-    entityFavType: 'artists' | 'albums' | 'tracks',
-    entityString: 'Artist' | 'Album' | 'Track',
+    entityFavType: keyof Favorites,
+    entityString: FavoriteEntryName,
   ) {
     const isEntityInFav = await this.databaseService.isEntityInFavorites(
       id,

@@ -3,3 +3,5 @@ export class Favorites {
   albums: string[];
   tracks: string[];
 }
+
+export type FavoriteEntryName = 'Artist' | 'Album' | 'Track';

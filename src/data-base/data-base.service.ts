@@ -121,7 +121,7 @@ export class DataBaseService {
 
   async isEntityInFavorites(
     id: string,
-    entityType: 'artists' | 'albums' | 'tracks',
+    entityType: keyof Favorites,
   ): Promise<boolean> {
     if (!['artists', 'albums', 'tracks'].includes(entityType)) {
       throw new Error(`Invalid entity type: ${entityType}`);
@@ -131,7 +131,7 @@ export class DataBaseService {
 
   async isEntityExists(
     id: string,
-    entityType: 'artists' | 'albums' | 'tracks',
+    entityType: keyof Favorites,
   ): Promise<boolean> {
     const entityMap = {
       artists: this.artists,
@@ -170,17 +170,11 @@ export class DataBaseService {
     return this.favs;
   }
 
-  async addToFavorites(
-    id: string,
-    type: 'artists' | 'albums' | 'tracks',
-  ): Promise<void> {
+  async addToFavorites(id: string, type: keyof Favorites): Promise<void> {
     this.favs[type].push(id);
   }
 
-  async removeFromFavorites(
-    id: string,
-    type: 'artists' | 'albums' | 'tracks',
-  ): Promise<void> {
+  async removeFromFavorites(id: string, type: keyof Favorites): Promise<void> {
     const index = this.favs[type].findIndex((artistId) => artistId === id);
 
     if (index === -1) {
@@ -188,17 +182,5 @@ export class DataBaseService {
     }
 
     this.favs[type].splice(index, 1);
-  }
-
-  async getFavArtists(): Promise<string[]> {
-    return this.favs.artists;
-  }
-
-  async getFavAlbums(): Promise<string[]> {
-    return this.favs.albums;
-  }
-
-  async getFavTracks(): Promise<string[]> {
-    return this.favs.tracks;
   }
 }
