@@ -74,3 +74,21 @@ npm run format
 Press <kbd>F5</kbd> to debug.
 
 For more information, visit: https://code.visualstudio.com/docs/editor/debugging
+
+
+
+
+
+
+## Запуск приложения
+
+### Требования
+- Docker
+- Docker Compose
+
+### Запуск
+1. Склонируйте репозиторий
+2. Создайте файл `.env` на основе `.env.example`
+3. Запустите приложение:
+```bash
+docker-compose up -d

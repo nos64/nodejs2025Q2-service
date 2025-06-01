@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../generated/prisma"
 }
 
 datasource db {
@@ -15,43 +14,72 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String   @default(uuid()) @id
   login     String   @unique
   password  String
-  version   Int      @default(1)
+  version   Int      @default(autoincrement())
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
 }
 
 model Artist {
-  id      String   @id @default(uuid())
+  id      String   @default(uuid()) @id
   name    String
   grammy  Boolean
   albums  Album[]
   tracks  Track[]
+  favorite FavoriteArtist?
+
+  @@map("artists")
 }
 
 model Track {
-  id       String  @id @default(uuid())
+  id       String  @default(uuid()) @id
   name     String
+  duration Int
   artist   Artist? @relation(fields: [artistId], references: [id])
   artistId String?
   album    Album?  @relation(fields: [albumId], references: [id])
   albumId  String?
-  duration Int
+  favorite FavoriteTrack?
+
+  @@map("tracks")
 }
 
 model Album {
-  id       String   @id @default(uuid())
+  id       String   @default(uuid()) @id
   name     String
   year     Int
   artist   Artist?  @relation(fields: [artistId], references: [id])
   artistId String?
   tracks   Track[]
+  favorite FavoriteAlbum?
+
+  @@map("albums")
 }
 
-model Favorites {
-  id      String @id @default(uuid())
-  artists Artist[] @relation("FavoriteArtists")
-  albums  Album[]  @relation("FavoriteAlbums")
-  tracks  Track[]  @relation("FavoriteTracks")
+model FavoriteAlbum {
+  id      Int    @id @default(autoincrement())
+  albumId String @unique
+  album   Album @relation(fields: [albumId], references: [id])
+
+  @@map("fav-albums")
+}
+
+model FavoriteArtist {
+  id       Int    @id @default(autoincrement())
+  artistId String @unique
+  artist   Artist @relation(fields: [artistId], references: [id])
+
+  @@map("fav-artists")
+}
+
+model FavoriteTrack {
+  id      Int    @id @default(autoincrement())
+  trackId String @unique
+  track   Track @relation(fields: [trackId], references: [id])
+
+  @@map("fav-tracks")
 }
