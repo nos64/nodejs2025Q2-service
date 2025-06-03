@@ -1,4 +1,10 @@
-import { IsNotEmpty, IsNumber, IsString, IsUUID } from 'class-validator';
+import {
+  IsDate,
+  IsNotEmpty,
+  IsNumber,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class User {
   @IsNotEmpty()
@@ -16,9 +22,12 @@ export class User {
   @IsNotEmpty()
   @IsNumber()
   version: number;
-  createdAt: number;
 
   @IsNotEmpty()
-  @IsNumber()
-  updatedAt: number;
+  @IsDate()
+  createdAt: Date;
+
+  @IsNotEmpty()
+  @IsDate()
+  updatedAt: Date;
 }
