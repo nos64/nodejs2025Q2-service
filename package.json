@@ -22,6 +22,7 @@
     "test:refresh": "cross-env TEST_MODE=auth jest --testPathPattern refresh.e2e.spec.ts --noStackTrace --runInBand",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
+    "docker:scan": "docker scout cves nodejs2025q2-service-app && docker scout cves nodejs2025q2-service-db",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "prisma:studio": "docker-compose run -p 5555:5555 --rm app npx prisma studio",
     "prisma:migrate": "docker-compose run --rm app npx prisma migrate dev --name init",
