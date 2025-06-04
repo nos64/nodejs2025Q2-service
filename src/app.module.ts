@@ -6,12 +6,10 @@ import { ArtistModule } from './artists/artist.module';
 import { TrackModule } from './tracks/track.module';
 import { AlbumModule } from './albums/album.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { DataBaseModule } from './data-base/data-base.module';
 import { PrismaModule } from './prisma/prisma.module';
 
 @Module({
   imports: [
-    DataBaseModule,
     UserModule,
     ArtistModule,
     TrackModule,
