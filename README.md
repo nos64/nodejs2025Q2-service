@@ -8,7 +8,7 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone {https://github.com/nos64/nodejs2025Q2-service}
 ```
 
 ## Installing NPM modules
@@ -17,24 +17,65 @@ git clone {repository URL}
 npm install
 ```
 
+## Switching the branch
+
+```
+git checkout hls-part-2
+```
+
+## Rename .env.example to .env
+
+```
+Replace .env.example with .env
+```
+
 ## Running application
 
 ```
-npm start
+docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open
-in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
+in your browser OpenAPI documentation by typing http://localhost:4000/api/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
+
+## Database GUI
+
+```
+npm run prisma:generate
+```
+Launches Prisma Studio GUI on port 5555 for database management.
+Access: http://localhost:5555
+
+## Other scripts:
+
+#### Full development setup: Starts PostgreSQL container, Generates Prisma Client, Applies migrations, Launches the app
+
+```
+npm run dev:docker
+```
+
+#### Starts development server with hot-reload (runs inside Docker container)
+
+```
+npm run dev:watch
+```
+
+#### Scans Docker images for vulnerabilities using Docker Scout
+
+```
+npm run docker:scan
+```
 
 ## Testing
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests with authorization and refresh tokens
 
 ```
-npm run test
+npm run test:auth
+npm run test:refresh
 ```
 
 To run only one of all test suites
@@ -43,17 +84,10 @@ To run only one of all test suites
 npm run test -- <path to suite>
 ```
 
-To run all test with authorization
+## Viewing logs
 
-```
-npm run test:auth
-```
+Run app and go to ./logs
 
-To run only specific test suite with authorization
-
-```
-npm run test:auth -- <path to suite>
-```
 
 ### Auto-fix and format
 
