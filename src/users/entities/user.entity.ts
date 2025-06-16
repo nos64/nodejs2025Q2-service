@@ -30,4 +30,8 @@ export class User {
   @IsNotEmpty()
   @IsDate()
   updatedAt: Date;
+
+  @IsNotEmpty()
+  @IsString()
+  refreshToken: string;
 }
