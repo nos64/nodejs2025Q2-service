@@ -18,6 +18,7 @@ export class UserService {
 
   async create(createUserDto: CreateUserDto): Promise<UserResponse> {
     const createAt = new Date();
+
     const createdUser = await this.prismaService.user.create({
       data: {
         login: createUserDto.login,
@@ -25,8 +26,10 @@ export class UserService {
         version: 1,
         createdAt: createAt,
         updatedAt: createAt,
+        refreshToken: '',
       },
     });
+
     return excludePassword(createdUser);
   }
 
@@ -97,5 +100,46 @@ export class UserService {
         id,
       },
     });
+  }
+
+  async findOneById(id: string): Promise<User> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    return user;
+  }
+
+  async findOneByLogin(login: string): Promise<User> {
+    return await this.prismaService.user.findFirst({
+      where: {
+        login: {
+          equals: login,
+          mode: 'insensitive',
+        },
+      },
+    });
+  }
+
+  async updateJwtToken(id: string, refreshToken: string): Promise<User> {
+    const user = await this.prismaService.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
+    const updatedUser = await this.prismaService.user.update({
+      where: {
+        id,
+      },
+      data: {
+        ...user,
+        refreshToken,
+      },
+    });
+
+    return updatedUser;
   }
 }
