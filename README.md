@@ -87,6 +87,10 @@ To run only one of all test suites
 npm run test -- <path to suite>
 ```
 
+## Viewing logs
+
+Run app and go to ./logs
+
 
 ### Auto-fix and format
 
