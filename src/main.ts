@@ -4,10 +4,16 @@ import * as dotenv from 'dotenv';
 
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { LoggingService } from './logging/logging.service';
+import { HttpExceptionFilter } from './common/http-exception-filter/http-exception.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
+
+  app.useLogger(app.get(LoggingService));
+  const logger = new LoggingService();
+  app.useGlobalFilters(new HttpExceptionFilter(logger));
 
   const config = new DocumentBuilder()
     .setTitle('Home Library Service')
