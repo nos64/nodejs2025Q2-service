@@ -32,7 +32,7 @@ Replace .env.example with .env
 ## Running application
 
 ```
-docker compose up
+docker-compose up
 ```
 
 After starting the app on port (4000 as default) you can open
@@ -71,14 +71,11 @@ npm run docker:scan
 
 After application running open new terminal and enter:
 
-To run all tests without authorization
+To run all tests with authorization and refresh tokens
 
 ```
-npm test -- test/users.e2e.spec.ts
-npm test -- test/artists.e2e.spec.ts
-npm test -- test/albums.e2e.spec.ts
-npm test -- test/favorites.e2e.spec.ts
-npm test -- test/tracks.e2e.spec.ts
+npm run test:auth
+npm run test:refresh
 ```
 
 To run only one of all test suites
