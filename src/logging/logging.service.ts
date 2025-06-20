@@ -4,7 +4,7 @@ import { join } from 'path';
 import { createWriteStream } from 'fs';
 import { mkdir, access } from 'fs/promises';
 import { pipeline } from 'stream/promises';
-import { cwd, exit } from 'process';
+import { cwd } from 'process';
 
 type LogPriority = { [key in LogLevel]: number };
 
@@ -37,26 +37,12 @@ export class LoggingService implements LoggerService {
         await mkdir(this.logDirectory, { recursive: true });
       });
 
-      this.initUncaughtHandlers();
-
       await this.log(`Logger initialized with level: ${this.logLevel}`);
     } catch (err) {
       console.error('Logger initialization failed:', err);
 
       throw err;
     }
-  }
-
-  private initUncaughtHandlers() {
-    process.on('uncaughtException', async (error) => {
-      await this.error(`Uncaught Exception: ${error.name}: ${error.message}`);
-
-      exit(1);
-    });
-
-    process.on('unhandledRejection', async (reason: Error) => {
-      await this.error(`Unhandled Rejection: ${reason.message}`);
-    });
   }
 
   private async logMessage(

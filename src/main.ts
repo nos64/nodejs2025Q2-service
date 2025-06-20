@@ -15,6 +15,14 @@ async function bootstrap() {
   const logger = new LoggingService();
   app.useGlobalFilters(new HttpExceptionFilter(logger));
 
+  process.on('uncaughtException', async (error) => {
+    logger.error(`Uncaught Exception: ${error.name}: ${error.message}`);
+  });
+
+  process.on('unhandledRejection', async (reason: Error) => {
+    logger.error(`Unhandled Rejection: ${reason.message}`);
+  });
+
   const config = new DocumentBuilder()
     .setTitle('Home Library Service')
     .setDescription('Home Library Service')
